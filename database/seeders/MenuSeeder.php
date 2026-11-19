@@ -11,13 +11,27 @@ class MenuSeeder extends Seeder
 {
     public function run(): void
     {
-        User::create([
-            'name' => 'Admin Naspad',
-            'email' => 'admin@naspad.com',
-            'role' => 'admin',
-            'password' => Hash::make('password'),
-        ]);
+      
+        User::updateOrCreate(
+            ['email' => 'admin@naspad.com'],
+            [
+                'name' => 'Admin Naspad',
+                'role' => 'admin',
+                'password' => Hash::make('password'),
+            ]
+        );
 
+   
+        User::updateOrCreate(
+            ['email' => 'user@naspad.com'],
+            [
+                'name' => 'Pembeli Naspad',
+                'role' => 'user',
+                'password' => Hash::make('password'),
+            ]
+        );
+
+      
         $menus = [
             ['nama_lauk' => 'Rendang Sapi', 'kategori' => 'Daging', 'harga' => 22000, 'stok' => 20],
             ['nama_lauk' => 'Dendeng Balado', 'kategori' => 'Daging', 'harga' => 20000, 'stok' => 15],
@@ -28,7 +42,10 @@ class MenuSeeder extends Seeder
         ];
 
         foreach ($menus as $menu) {
-            Menu::create($menu);
+            Menu::firstOrCreate(
+                ['nama_lauk' => $menu['nama_lauk']],
+                $menu
+            );
         }
     }
 }
